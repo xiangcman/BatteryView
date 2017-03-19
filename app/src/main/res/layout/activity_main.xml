@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#12b3c9"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.library.battery.BatteryView
+        android:id="@+id/batteryView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:battery_lowpower_color="#d96d15"
+        app:battery_lowpower_percnet="10%"
+        app:ring_radius="@dimen/ring_radius"
+        app:ring_stroke_width="@dimen/ring_stroke_width"
+        app:wave_color="#3acf38"
+        app:wave_cycle_time="1000"
+        app:wave_peek="@dimen/wave_peek"
+        app:wave_width="@dimen/wave_width" />
+
+</LinearLayout>

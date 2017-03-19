@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="ring_stroke_width">4dp</dimen>
+    <dimen name="ring_radius">150dp</dimen>
+    <dimen name="wave_width">150dp</dimen>
+    <dimen name="wave_peek">20dp</dimen>
+</resources>

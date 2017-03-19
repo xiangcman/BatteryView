@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BatteryView">
+        <!--外圈的宽度-->
+        <attr name="ring_stroke_width" format="dimension" />
+        <!--外圆的半径-->
+        <attr name="ring_radius" format="dimension" />
+        <!--一个波浪的宽度-->
+        <attr name="wave_width" format="dimension" />
+        <!--波浪的峰值-->
+        <attr name="wave_peek" format="dimension" />
+        <!--波浪走动的速度-->
+        <attr name="wave_cycle_time" format="integer" />
+        <!--波浪的颜色-->
+        <attr name="wave_color" format="color" />
+        <!--充电状态颜色-->
+        <attr name="battery_status_color" format="color" />
+        <!--充电状态文字大小-->
+        <attr name="battery_status_size" format="dimension" />
+        <!--充电百分比的颜色-->
+        <attr name="battery_level_color" format="color" />
+        <!--充电百分比文字大小-->
+        <attr name="battery_level_size" format="dimension" />
+        <!--低电量下的文字闪动的颜色-->
+        <attr name="battery_lowpower_color" format="color" />
+        <!--正在充电的文本-->
+        <attr name="battery_charging_text" format="string|reference" />
+        <!--充满的文字-->
+        <attr name="battery_fill_text" format="string|reference" />
+        <!--正在使用的文字-->
+        <attr name="battery_using_text" format="string|reference" />
+        <!--低电量的文字-->
+        <attr name="battery_lowpower_text" format="string|reference" />
+        <!--百分之多少时才显示低电量-->
+        <attr name="battery_lowpower_percnet" format="fraction" />
+
+    </declare-styleable>
+</resources>
