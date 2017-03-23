@@ -74,7 +74,7 @@
 布局中用到的属性不是全的，就拿了几个试试。想要看更多的属性自己添加吧。效果图如下:
 
 
-![自定义属性simple.gif](http://upload-images.jianshu.io/upload_images/2528336-6820b72c5f05964e.gif?imageMogr2/auto-orient/strip)
+![自定义属性simple.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/自定义属性simple.gif)
 - 代码部分：
 ```java
 public class MainActivity extends AppCompatActivity {
@@ -107,4 +107,4 @@ public class MainActivity extends AppCompatActivity {
 ### 关于我:
 **email:** a1002326270@163.com
 
-**github:**[enter](https://github.com/1002326270xc/BatteryView)
+**github:**
