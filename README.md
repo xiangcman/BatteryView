@@ -1,12 +1,12 @@
 前几天看到贝塞尔曲线的时候，想想用贝塞尔做些什么东西出来。很快一个电量显示的控件就马上登场了，先来看下效果图吧：
 **充电中**
-![充电中.gif](http://upload-images.jianshu.io/upload_images/2528336-2f8d6320632a07c2.gif?imageMogr2/auto-orient/strip)
+![充电中.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/充电中.gif)
 **不在充电情况下，电量大于20%**
-![不在充电情况下，电量大于20%.gif](http://upload-images.jianshu.io/upload_images/2528336-12af530119ab858e.gif?imageMogr2/auto-orient/strip)
+![不在充电情况下，电量大于20%.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/不在充电情况下，电量大于20%25.gif)
 **不在充电情况下，并且电量在20%之下**
-![不在充电情况下，并且电量在20%之下.gif](http://upload-images.jianshu.io/upload_images/2528336-e16f89ba5a494393.gif?imageMogr2/auto-orient/strip)
+![不在充电情况下，并且电量在20%之下.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/不在充电情况下，并且电量在20%25之下.gif)
 **充电情况下，并且电量充满了**
-![充电情况下，并且电量充满了.gif](http://upload-images.jianshu.io/upload_images/2528336-885327b89271aa7d.gif?imageMogr2/auto-orient/strip)
+![充电情况下，并且电量充满了.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/充电情况下，并且电量充满了.gif)
 
 看到效果图基本就这几种状态了，这几种状态里面首先分了两大类:充电中，未充电中；充电中又细分了充电到100%和未达到100%两种；未充电中又细分了电量低中和电量不在低中的两种。
 
@@ -96,6 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
 切记:**这里调用BatteryView的setChange方法必须要在layout都加载完才能调用该方法。**
 
-###关于我:
-**email:**a1002326270@163.com
+### 关于我:
+**email:** a1002326270@163.com
 **github:**[enter](https://github.com/1002326270xc/BatteryView)
