@@ -1,10 +1,14 @@
 前几天看到贝塞尔曲线的时候，想想用贝塞尔做些什么东西出来。很快一个电量显示的控件就马上登场了，先来看下效果图吧：
+
 **充电中**
 ![充电中.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/充电中.gif)
+
 **不在充电情况下，电量大于20%**
 ![不在充电情况下，电量大于20%.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/不在充电情况下，电量大于20%25.gif)
+
 **不在充电情况下，并且电量在20%之下**
 ![不在充电情况下，并且电量在20%之下.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/不在充电情况下，并且电量在20%25之下.gif)
+
 **充电情况下，并且电量充满了**
 ![充电情况下，并且电量充满了.gif](https://github.com/1002326270xc/BatteryView/blob/master/photos/充电情况下，并且电量充满了.gif)
 
@@ -98,4 +102,5 @@ public class MainActivity extends AppCompatActivity {
 
 ### 关于我:
 **email:** a1002326270@163.com
+
 **github:**[enter](https://github.com/1002326270xc/BatteryView)
