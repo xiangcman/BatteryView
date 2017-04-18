@@ -107,4 +107,6 @@ public class MainActivity extends AppCompatActivity {
 ### 关于我:
 **email:** a1002326270@163.com
 
-**github:** http://www.jianshu.com/users/7b186b7247c1/latest_articles
+**csdn:** http://blog.csdn.net/u010429219/article/details/64906203
+
+**简书:** http://www.jianshu.com/p/c9cecd67e439
