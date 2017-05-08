@@ -18,13 +18,13 @@ import android.view.animation.LinearInterpolator;
 
 import battery.single.com.library.R;
 
-
 /**
- * Created by xiangcheng on 2017/7/17
+ * Created by Administrator on 2016/1/28.
  * 电量显示的view
  */
 public class BatteryView extends View {
 
+    private static final String TAG = BatteryView.class.getSimpleName();
     private int mWidth, mHeight;
     //外圈的半径
     private int mRadius;
@@ -62,7 +62,7 @@ public class BatteryView extends View {
     private Paint mLevelPaint;
     //外圆的画笔
     private Path mBgPath;
-    //用于裁剪的path
+    //用于裁剪的path,画出来的波浪由于是方形的，因此按照此path来进行裁剪
     private Path mClipPath;
     //电量的高度显示，通过圆的直径比例来计算该高度
     private float mLevelHeight;
@@ -200,10 +200,12 @@ public class BatteryView extends View {
             if (batteryLevel < maxLevel) {
                 isFull = false;
                 statusText = charging_text;
-                if (firstWaveBehind != null && !firstWaveBehind.isRunning()) {
+                if (firstWaveBehind != null && !firstWaveBehind.isRunning() && !firstWaveHasStart) {
+                    Log.d(TAG, "firstWaveBehind启动了");
                     firstWaveBehind.start();
                 }
-                if (secondWaveFront != null && !secondWaveFront.isRunning()) {
+                if (secondWaveFront != null && !secondWaveFront.isRunning() && !secondWaveHasStart) {
+                    Log.d(TAG, "secondWaveFront启动了");
                     secondWaveFront.start();
                 }
             } else {
@@ -223,12 +225,16 @@ public class BatteryView extends View {
                 if (secondWaveBehind != null && secondWaveBehind.isRunning()) {
                     secondWaveBehind.end();
                 }
+                firstWaveHasStart = false;
+                secondWaveHasStart = false;
             }
 
         } else {
             firstWaveOffset = 0;
             secondWaveOffset = -(mWaveWidth + fullCount * mWaveWidth);
             isFull = false;
+            firstWaveHasStart = false;
+            secondWaveHasStart = false;
             if (firstWaveBehind != null && firstWaveBehind.isRunning()) {
                 firstWaveBehind.end();
             }
@@ -256,7 +262,6 @@ public class BatteryView extends View {
                 }
                 invalidate();
             }
-
 
         }
     }
@@ -297,6 +302,7 @@ public class BatteryView extends View {
         mWidth = getWidth();
         mHeight = getHeight();
         mBgPath.addCircle(mWidth / 2, mHeight / 2, mRadius, Path.Direction.CCW);
+        //被裁剪的path画的圆的半径是外圆半径-外圆宽度的/2
         mClipPath.addCircle(mWidth / 2, mHeight / 2, mRadius - circleWidth / 2, Path.Direction.CCW);
         fullCount = mWidth / mWaveWidth;
         initAim();
@@ -319,13 +325,36 @@ public class BatteryView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawPath(mBgPath, mBgPaint);
+        drawWave(canvas);
+        if (isLowPower) {
+            mLevelPaint.setColor(lowPowerColor);
+            mStatusPaint.setColor(lowPowerColor);
+            if (isShowStatusAndLevel) {
+                drawStatusAndLevel(canvas);
+            }
+        } else {
+            mLevelPaint.setColor(levelColor);
+            mStatusPaint.setColor(statusColor);
+            drawStatusAndLevel(canvas);
+        }
+
+    }
+
+    /**
+     * 绘制波浪
+     *
+     * @param canvas
+     */
+    private void drawWave(Canvas canvas) {
+        mBatteryPaint.setAlpha((int) (textAlpha * 255));
         canvas.save();
+        //先将画布按照内圆进行裁剪
         canvas.clipPath(mClipPath);
 
         Log.d("TAG", "firstWaveOffset:" + firstWaveOffset);
 
-        mBatteryPath.reset();
         //第一个波浪
+        mBatteryPath.reset();
         mBatteryPath.moveTo(firstWaveOffset, mLevelHeight);
         for (int i = 0; i < fullCount; i++) {
             float startX = firstWaveOffset + mWaveWidth / 2 + i * mWaveWidth;
@@ -342,6 +371,8 @@ public class BatteryView extends View {
         mBatteryPath.lineTo(firstWaveOffset, mHeight);
         mBatteryPath.lineTo(firstWaveOffset, mLevelHeight);
         canvas.drawPath(mBatteryPath, mBatteryPaint);
+
+        //第二个波浪
         mBatteryPath.reset();
         mBatteryPath.moveTo(secondWaveOffset, mLevelHeight);
         for (int i = fullCount + 1; i < 2 * fullCount + 1; i++) {
@@ -360,20 +391,16 @@ public class BatteryView extends View {
         mBatteryPath.lineTo(secondWaveOffset, mLevelHeight);
         canvas.drawPath(mBatteryPath, mBatteryPaint);
         canvas.restore();
-        if (isLowPower) {
-            mLevelPaint.setColor(lowPowerColor);
-            mStatusPaint.setColor(lowPowerColor);
-            if (isShowStatusAndLevel) {
-                drawStatusAndLevel(canvas);
-            }
-        } else {
-            mLevelPaint.setColor(levelColor);
-            mStatusPaint.setColor(statusColor);
-            drawStatusAndLevel(canvas);
-        }
-
     }
 
+    private boolean firstWaveHasStart;
+    private boolean secondWaveHasStart;
+
+    /**
+     * 绘制充电状态和当前显示的电量百分数
+     *
+     * @param canvas
+     */
     private void drawStatusAndLevel(Canvas canvas) {
         if (!TextUtils.isEmpty(levelText) && !TextUtils.isEmpty(statusText)) {
             mLevelPaint.setAlpha((int) (textAlpha * 255));
@@ -390,7 +417,6 @@ public class BatteryView extends View {
         firstWaveBehind.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.d("BatteryView", "firstWaveBehind");
                 firstWaveOffset = (float) animation.getAnimatedValue();
                 invalidate();
             }
@@ -400,6 +426,11 @@ public class BatteryView extends View {
             public void onAnimationEnd(Animator animation) {
                 if (mStatus == STATUS_CHARGING && !isFull)
                     firstWaveFront.start();
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                firstWaveHasStart = true;
             }
         });
         firstWaveFront = ValueAnimator.ofFloat(-(mWaveWidth + fullCount * mWaveWidth), 0);
@@ -417,7 +448,6 @@ public class BatteryView extends View {
             public void onAnimationEnd(Animator animation) {
                 if (mStatus == STATUS_CHARGING && !isFull)
                     firstWaveBehind.start();
-
             }
         });
 
@@ -436,6 +466,12 @@ public class BatteryView extends View {
             public void onAnimationEnd(Animator animation) {
                 if (mStatus == STATUS_CHARGING && !isFull)
                     secondWaveBehind.start();
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                secondWaveHasStart = true;
             }
         });
 
@@ -499,6 +535,7 @@ public class BatteryView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Log.d(TAG, "onDetachedFromWindow");
         if (firstWaveFront != null && firstWaveFront.isRunning()) {
             firstWaveFront.end();
         }
