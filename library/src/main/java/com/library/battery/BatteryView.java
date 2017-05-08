@@ -19,7 +19,7 @@ import android.view.animation.LinearInterpolator;
 import battery.single.com.library.R;
 
 /**
- * Created by Administrator on 2016/1/28.
+ * Created by xiangcheng on 2016/3/8.
  * 电量显示的view
  */
 public class BatteryView extends View {
