@@ -33,6 +33,11 @@
         <attr name="battery_lowpower_text" format="string|reference" />
         <!--百分之多少时才显示低电量-->
         <attr name="battery_lowpower_percnet" format="fraction" />
+        <!--充电的时候波浪滚动的方向-->
+        <attr name="charging_direction" format="enum">
+            <enum name="left2right" value="1" />
+            <enum name="right2left" value="2" />
+        </attr>
 
     </declare-styleable>
 </resources>

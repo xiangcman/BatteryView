@@ -60,7 +60,7 @@ public class BatteryView extends View {
     private Paint mBgPaint;
     //文字部分的画笔
     private Paint mLevelPaint;
-    //外圆的画笔
+    //外圆的path
     private Path mBgPath;
     //用于裁剪的path,画出来的波浪由于是方形的，因此按照此path来进行裁剪
     private Path mClipPath;
@@ -108,6 +108,9 @@ public class BatteryView extends View {
 
     private float lowperPercent;
 
+    //add 2017/6/27,充电的时候波浪滚动的方向
+    private int charginDirection;
+
     public BatteryView(Context context) {
         this(context, null);
     }
@@ -153,6 +156,8 @@ public class BatteryView extends View {
             lowpower_text = array.getString(R.styleable.BatteryView_battery_lowpower_text) == null ? lowpower_text : "";
             lowperPercent = 0.2f;
             lowperPercent = array.getFraction(R.styleable.BatteryView_battery_lowpower_percnet, 1, 1, lowperPercent);
+            charginDirection = 1;
+            charginDirection = array.getInt(R.styleable.BatteryView_charging_direction, charginDirection);
             if (lowperPercent > 1) {
                 throw new IllegalArgumentException("lowperPercent must be less than 1");
             }
@@ -301,6 +306,7 @@ public class BatteryView extends View {
         Log.d("TAG", "onSizeChanged");
         mWidth = getWidth();
         mHeight = getHeight();
+        //背景path
         mBgPath.addCircle(mWidth / 2, mHeight / 2, mRadius, Path.Direction.CCW);
         //被裁剪的path画的圆的半径是外圆半径-外圆宽度的/2
         mClipPath.addCircle(mWidth / 2, mHeight / 2, mRadius - circleWidth / 2, Path.Direction.CCW);
@@ -411,7 +417,13 @@ public class BatteryView extends View {
     }
 
     private void initAim() {
-        firstWaveBehind = ValueAnimator.ofFloat(0, mWaveWidth + fullCount * mWaveWidth);
+        //left2right
+        if (charginDirection == 1) {
+            firstWaveBehind = ValueAnimator.ofFloat(0, mWaveWidth + fullCount * mWaveWidth);
+        } else {
+            firstWaveBehind = ValueAnimator.ofFloat(0, -(mWaveWidth + fullCount * mWaveWidth));
+        }
+
         firstWaveBehind.setDuration(waveCycleTime);
         firstWaveBehind.setInterpolator(new LinearInterpolator());
         firstWaveBehind.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -433,7 +445,12 @@ public class BatteryView extends View {
                 firstWaveHasStart = true;
             }
         });
-        firstWaveFront = ValueAnimator.ofFloat(-(mWaveWidth + fullCount * mWaveWidth), 0);
+        if (charginDirection == 1) {
+            firstWaveFront = ValueAnimator.ofFloat(-(mWaveWidth + fullCount * mWaveWidth), 0);
+        } else {
+            firstWaveFront = ValueAnimator.ofFloat(mWaveWidth + fullCount * mWaveWidth, 0);
+        }
+
         firstWaveFront.setDuration(waveCycleTime);
         firstWaveFront.setInterpolator(new LinearInterpolator());
         firstWaveFront.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -451,7 +468,12 @@ public class BatteryView extends View {
             }
         });
 
-        secondWaveFront = ValueAnimator.ofFloat(-(mWaveWidth + fullCount * mWaveWidth), 0);
+        if (charginDirection == 1) {
+            secondWaveFront = ValueAnimator.ofFloat(-(mWaveWidth + fullCount * mWaveWidth), 0);
+        } else {
+            secondWaveFront = ValueAnimator.ofFloat(mWaveWidth + fullCount * mWaveWidth, 0);
+        }
+
         secondWaveFront.setDuration(waveCycleTime);
         secondWaveFront.setInterpolator(new LinearInterpolator());
         secondWaveFront.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -475,7 +497,11 @@ public class BatteryView extends View {
             }
         });
 
-        secondWaveBehind = ValueAnimator.ofFloat(0, mWaveWidth + fullCount * mWaveWidth);
+        if (charginDirection == 1) {
+            secondWaveBehind = ValueAnimator.ofFloat(0, mWaveWidth + fullCount * mWaveWidth);
+        } else {
+            secondWaveBehind = ValueAnimator.ofFloat(0, -(mWaveWidth + fullCount * mWaveWidth));
+        }
         secondWaveBehind.setDuration(waveCycleTime);
         secondWaveBehind.setInterpolator(new LinearInterpolator());
         secondWaveBehind.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
